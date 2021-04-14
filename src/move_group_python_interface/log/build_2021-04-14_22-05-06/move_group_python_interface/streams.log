@@ -1,0 +1,21 @@
+[0.132s] Invoking command in '/home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface': PYTHONPATH=/home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base build/move_group_python_interface build --build-base /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/build/move_group_python_interface/build install --prefix /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface --record /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/build/move_group_python_interface/install.log --single-version-externally-managed
+[0.248s] running egg_info
+[0.248s] writing build/move_group_python_interface/move_group_python_interface.egg-info/PKG-INFO
+[0.248s] writing dependency_links to build/move_group_python_interface/move_group_python_interface.egg-info/dependency_links.txt
+[0.248s] writing entry points to build/move_group_python_interface/move_group_python_interface.egg-info/entry_points.txt
+[0.248s] writing requirements to build/move_group_python_interface/move_group_python_interface.egg-info/requires.txt
+[0.248s] writing top-level names to build/move_group_python_interface/move_group_python_interface.egg-info/top_level.txt
+[0.266s] reading manifest file 'build/move_group_python_interface/move_group_python_interface.egg-info/SOURCES.txt'
+[0.267s] writing manifest file 'build/move_group_python_interface/move_group_python_interface.egg-info/SOURCES.txt'
+[0.267s] running build
+[0.267s] running build_py
+[0.267s] running install
+[0.268s] running install_lib
+[0.268s] running install_data
+[0.269s] running install_egg_info
+[0.269s] removing '/home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface/lib/python3.8/site-packages/move_group_python_interface-1.0.0-py3.8.egg-info' (and everything under it)
+[0.270s] Copying build/move_group_python_interface/move_group_python_interface.egg-info to /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface/lib/python3.8/site-packages/move_group_python_interface-1.0.0-py3.8.egg-info
+[0.270s] running install_scripts
+[0.280s] Installing move_group script to /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface/lib/move_group_python_interface
+[0.280s] writing list of installed files to '/home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/build/move_group_python_interface/install.log'
+[0.292s] Invoked command in '/home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface' returned '0': PYTHONPATH=/home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface/lib/python3.8/site-packages:${PYTHONPATH} /usr/bin/python3 setup.py egg_info --egg-base build/move_group_python_interface build --build-base /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/build/move_group_python_interface/build install --prefix /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/install/move_group_python_interface --record /home/chaos/moveit2_ws/src/moveit2_tutorials/doc/move_group_python_interface/build/move_group_python_interface/install.log --single-version-externally-managed

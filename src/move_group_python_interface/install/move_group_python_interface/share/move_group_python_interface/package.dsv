@@ -1,0 +1,3 @@
+source;share/move_group_python_interface/hook/pythonpath.ps1
+source;share/move_group_python_interface/hook/pythonpath.dsv
+source;share/move_group_python_interface/hook/pythonpath.sh

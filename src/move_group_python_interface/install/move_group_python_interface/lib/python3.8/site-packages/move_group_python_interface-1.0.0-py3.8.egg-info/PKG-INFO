@@ -1,0 +1,10 @@
+Metadata-Version: 1.2
+Name: move-group-python-interface
+Version: 1.0.0
+Summary: ROS 2 tutorial: Using URDF with robot_state_publisher
+Home-page: UNKNOWN
+Maintainer: Ben Bongalon
+Maintainer-email: ben.bongalon@gmail.com
+License: BSD
+Description: UNKNOWN
+Platform: UNKNOWN

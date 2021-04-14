@@ -1,0 +1,3 @@
+[console_scripts]
+move_group = move_group_python_interface.move_group_python_interface_tutorial:main
+
