@@ -107,7 +107,7 @@ public:
     // ros::serialization::serialize(stream_arg, msg);
     // ###########################################################################################
     // new #425
-    // error解消：serialized_msgの宣言を追加する https://github.com/ros2/demos/blob/master/demo_nodes_cpp/src/topics/talker_serialized_message.cpp　
+    // add declaration of serialized_msg (not declared error) https://github.com/ros2/demos/blob/master/demo_nodes_cpp/src/topics/talker_serialized_message.cpp　
     rclcpp::SerializedMessage serialized_msg;
     serialized_msg.reserve(8u + static_cast<size_t>(sizeof(msg)));
     // serialized_msg.reserve(8u + static_cast<size_t>(PyBytes_GET_SIZE(ptr())));
