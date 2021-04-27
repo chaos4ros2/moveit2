@@ -36,7 +36,14 @@
 
 #pragma once
 
-#include <ros/ros.h>
+// #####################################
+// old
+// #include <ros/ros.h>
+// #####################################
+// new 425
+// https://answers.ros.org/question/371866/ros1-vs-ros2-serialization/
+#include "rclcpp/serialization.hpp"
+// #####################################
 #include <Python.h>
 #include <boost/python.hpp>
 #include <string>
@@ -71,14 +78,42 @@ public:
   /** \brief Serializes a ROS message into a Python Bytes object
    * The second template parameter ensures that this overload is only chosen with a ROS message argument
    */
-  template <typename T, typename std::enable_if<ros::message_traits::IsMessage<T>::value, int>::type = 0>
+  // ######################################################################################################
+  // old
+  // template <typename T, typename std::enable_if<ros::message_traits::IsMessage<T>::value, int>::type = 0>
+  // ######################################################################################################
+  // new #425
+  template <typename T>
+  // ######################################################################################################
   explicit ByteString(const T& msg)
     : boost::python::object(
-          boost::python::handle<>(PyBytes_FromStringAndSize(nullptr, ros::serialization::serializationLength(msg))))
+          // ######################################################################################################
+          // old
+          // boost::python::handle<>(PyBytes_FromStringAndSize(nullptr, ros::serialization::serializationLength(msg)))
+          // #######################################################################################################
+          // new #425
+          // https://answers.ros.org/question/371866/ros1-vs-ros2-serialization/
+          // https://github.com/ros2/demos/blob/eloquent/demo_nodes_cpp/src/topics/talker_serialized_message.cpp#L58-L112
+          // https://answers.ros.org/question/371410/ros2-how-are-msgs-serialised-compared-to-ros1/
+          // https://answers.ros.org/question/369220/where-is-the-source-code-for-different-middleware-implementations-in-ros2-foxy/
+          boost::python::handle<>(PyBytes_FromStringAndSize(nullptr, 8u + static_cast<size_t>(sizeof(msg))))
+          // #######################################################################################################
+      )
   {
-    ros::serialization::OStream stream_arg(reinterpret_cast<uint8_t*>(PyBytes_AS_STRING(ptr())),
-                                           PyBytes_GET_SIZE(ptr()));
-    ros::serialization::serialize(stream_arg, msg);
+    // ##########################################################################################
+    // old
+    // ros::serialization::OStream stream_arg(reinterpret_cast<uint8_t*>(PyBytes_AS_STRING(ptr())),
+    //                                       PyBytes_GET_SIZE(ptr()));
+    // ros::serialization::serialize(stream_arg, msg);
+    // ###########################################################################################
+    // new #425
+    // error解消：serialized_msgの宣言を追加する https://github.com/ros2/demos/blob/master/demo_nodes_cpp/src/topics/talker_serialized_message.cpp　
+    rclcpp::SerializedMessage serialized_msg;
+    serialized_msg.reserve(8u + static_cast<size_t>(sizeof(msg)));
+    // serialized_msg.reserve(8u + static_cast<size_t>(PyBytes_GET_SIZE(ptr())));
+    static rclcpp::Serialization<T> serializer;
+    serializer.serialize_message(&msg, &serialized_msg);
+    // ###########################################################################################
   }
 
   /** \brief Convert content to a ROS message */
@@ -92,9 +127,19 @@ public:
     {
       throw std::runtime_error("Underlying python object is not a Bytes/String instance");
     }
+    // ###############################################################################################
+    // # old
     // unfortunately no constructor with const uint8_t
-    ros::serialization::IStream stream_arg(reinterpret_cast<uint8_t*>(buf), PyBytes_GET_SIZE(ptr()));
-    ros::serialization::deserialize(stream_arg, msg);
+    // ros::serialization::IStream stream_arg(reinterpret_cast<uint8_t*>(buf), PyBytes_GET_SIZE(ptr()));
+    // ros::serialization::deserialize(stream_arg, msg);
+    // ################################################################################################
+    // # new #425
+    rclcpp::SerializedMessage serialized_msg;
+    serialized_msg.reserve(8u + static_cast<size_t>(sizeof(msg)));
+    // serialized_msg.reserve(8u + static_cast<size_t>(PyBytes_GET_SIZE(ptr())));
+    static rclcpp::Serialization<T> serializer;
+    serializer.serialize_message(&msg, &serialized_msg);
+    // ################################################################################################
   }
 };
 

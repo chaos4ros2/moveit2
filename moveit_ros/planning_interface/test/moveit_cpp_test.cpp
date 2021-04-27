@@ -46,7 +46,13 @@
 #include <moveit/moveit_cpp/moveit_cpp.h>
 #include <moveit/moveit_cpp/planning_component.h>
 // Msgs
-#include <geometry_msgs/PointStamped.h>
+// #########################################
+// old
+// #include <geometry_msgs/PointStamped.h>
+// ##########################################
+// new #425
+#include "/opt/ros/foxy/share/geometry_msgs/msg/PointStamped.msg"
+// ########################################### 
 
 namespace moveit
 {

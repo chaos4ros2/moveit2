@@ -37,7 +37,14 @@
 #include "moveit/py_bindings_tools/roscpp_initializer.h"
 #include "moveit/py_bindings_tools/py_conversions.h"
 #include <boost/thread.hpp>
-#include <ros/ros.h>
+// #425
+// ##########################################
+// old
+// #include <ros/ros.h>
+// ##########################################
+// new
+#include "rclcpp/rclcpp.hpp"
+// ###########################################
 #include <memory>
 
 static std::vector<std::string>& ROScppArgs()
@@ -70,8 +77,15 @@ struct InitProxy
     for (std::size_t i = 0; i < args.size(); ++i)
       fake_argv[i] = strdup(args[i].c_str());
 
-    ros::init(fake_argc, fake_argv, ROScppNodeName(),
-              ros::init_options::AnonymousName | ros::init_options::NoSigintHandler);
+    // ###################################################
+    // old
+    // ros::init(fake_argc, fake_argv, ROScppNodeName(),
+    //          ros::init_options::AnonymousName | ros::init_options::NoSigintHandler);
+    // ####################################################
+    // new #425
+    rclcpp::init(fake_argc, fake_argv);
+    // auto node = rclcpp::Node::make_shared(ROScppNodeName());
+    // ####################################################
     for (int i = 0; i < fake_argc; ++i)
       delete[] fake_argv[i];
     delete[] fake_argv;
@@ -79,8 +93,15 @@ struct InitProxy
 
   ~InitProxy()
   {
-    if (ros::isInitialized() && !ros::isShuttingDown())
-      ros::shutdown();
+    // ###################################################
+    // old
+    // if (ros::isInitialized() && !ros::isShuttingDown())
+    //  ros::shutdown();
+    // ####################################################
+    // new #425
+    if (rclcpp::ok())
+      rclcpp::shutdown();
+    // #####################################################
   }
 };
 }  // namespace
@@ -94,7 +115,8 @@ static void roscpp_init_or_stop(bool init)
   // once per process, we start a spinner
   static bool once = true;
   static std::unique_ptr<InitProxy> proxy;
-  static std::unique_ptr<ros::AsyncSpinner> spinner;
+  // old #425
+  // static std::unique_ptr<ros::AsyncSpinner> spinner;
 
   // initialize only once
   if (once && init)
@@ -102,11 +124,26 @@ static void roscpp_init_or_stop(bool init)
     once = false;
 
     // if ROS (cpp) is not initialized, we initialize it
-    if (!ros::isInitialized())
+    // ###################################################
+    // old
+    // if (!ros::isInitialized())
+    // ####################################################
+    // new #425
+    if (!rclcpp::ok())
+    // #####################################################
     {
       proxy.reset(new InitProxy());
-      spinner.reset(new ros::AsyncSpinner(1));
-      spinner->start();
+      // ####################################################
+      // old
+      // spinner.reset(new ros::AsyncSpinner(1));
+      // spinner->start();
+      // #####################################################
+      // new #425
+      rclcpp::executors::MultiThreadedExecutor executor;
+      auto node = rclcpp::Node::make_shared(ROScppNodeName());
+      executor.add_node(node);
+      executor.spin();
+      // #####################################################
     }
   }
 
@@ -115,7 +152,13 @@ static void roscpp_init_or_stop(bool init)
   {
     once = false;
     proxy.reset();
-    spinner.reset();
+    // #################
+    // # old
+    // spinner.reset();
+    // #################
+    // # new #425
+    rclcpp::shutdown();
+    // #################
   }
 }
 
