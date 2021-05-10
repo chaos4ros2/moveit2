@@ -46,7 +46,7 @@
 // #include <visualization_msgs/MarkerArray.h>
 // ####################################################################
 // # new 425
-#include "/opt/ros/foxy/share/visualization_msgs/msg/MarkerArray.msg"
+#include <visualization_msgs/msg/marker_array.hpp>
 // ####################################################################
 
 #include <stdexcept>
@@ -297,7 +297,13 @@ public:
 
     boost::python::list k = values.keys();
     int l = boost::python::len(k);
-    sensor_msgs::JointState joint_state;
+    // ######################################
+    // old
+    // sensor_msgs::JointState joint_state;
+    // ######################################
+    // new 425
+    sensor_msgs::msg::JointState joint_state;
+    // ######################################
     joint_state.name.resize(l);
     joint_state.position.resize(l);
     for (int i = 0; i < l; ++i)
@@ -306,7 +312,13 @@ public:
       joint_state.position[i] = boost::python::extract<double>(values[k[i]]);
     }
     state->setVariableValues(joint_state);
-    visualization_msgs::MarkerArray msg;
+    // ######################################
+    // old
+    // visualization_msgs::MarkerArray msg;
+    // #######################################
+    // new 425
+    visualization_msgs::msg::MarkerArray msg;
+    // #######################################
     state->getRobotMarkers(msg, py_bindings_tools::stringFromList(links));
 
     return py_bindings_tools::serializeMsg(msg);
@@ -325,7 +337,13 @@ public:
     py_bindings_tools::deserializeMsg(state_str, state_msg);
     moveit::core::robotStateMsgToRobotState(state_msg, state);
 
-    visualization_msgs::MarkerArray msg;
+    // ######################################
+    // old
+    // visualization_msgs::MarkerArray msg;
+    // #######################################
+    // new 425
+    visualization_msgs::msg::MarkerArray msg;
+    // #######################################
     state.getRobotMarkers(msg, state.getRobotModel()->getLinkModelNames());
 
     return py_bindings_tools::serializeMsg(msg);
@@ -336,7 +354,13 @@ public:
     if (!ensureCurrentState())
       return py_bindings_tools::ByteString();
     moveit::core::RobotStatePtr s = current_state_monitor_->getCurrentState();
-    visualization_msgs::MarkerArray msg;
+    // ######################################
+    // old
+    // visualization_msgs::MarkerArray msg;
+    // #######################################
+    // new 425
+    visualization_msgs::msg::MarkerArray msg;
+    // #######################################
     s->getRobotMarkers(msg, s->getRobotModel()->getLinkModelNames());
 
     return py_bindings_tools::serializeMsg(msg);
@@ -347,7 +371,13 @@ public:
     if (!ensureCurrentState())
       return py_bindings_tools::ByteString("");
     moveit::core::RobotStatePtr s = current_state_monitor_->getCurrentState();
-    visualization_msgs::MarkerArray msg;
+    // ######################################
+    // old
+    // visualization_msgs::MarkerArray msg;
+    // #######################################
+    // new 425
+    visualization_msgs::msg::MarkerArray msg;
+    // #######################################
     s->getRobotMarkers(msg, py_bindings_tools::stringFromList(links));
 
     return py_bindings_tools::serializeMsg(msg);
@@ -359,7 +389,13 @@ public:
       return py_bindings_tools::ByteString("");
     moveit::core::RobotStatePtr s = current_state_monitor_->getCurrentState();
     const moveit::core::JointModelGroup* jmg = robot_model_->getJointModelGroup(group);
-    visualization_msgs::MarkerArray msg;
+    // ######################################
+    // old
+    // visualization_msgs::MarkerArray msg;
+    // #######################################
+    // new 425
+    visualization_msgs::msg::MarkerArray msg;
+    // #######################################
     if (jmg)
     {
       s->getRobotMarkers(msg, jmg->getLinkModelNames());

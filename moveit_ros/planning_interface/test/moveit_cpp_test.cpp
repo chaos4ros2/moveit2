@@ -51,7 +51,7 @@
 // #include <geometry_msgs/PointStamped.h>
 // ##########################################
 // new #425
-#include "/opt/ros/foxy/share/geometry_msgs/msg/PointStamped.msg"
+#include <geometry_msgs/msg/point_stamped.hpp>
 // ########################################### 
 
 namespace moveit
@@ -61,6 +61,10 @@ namespace planning_interface
 class MoveItCppTest : public ::testing::Test
 {
 public:
+  // ##################
+  // # new 425 https://stackoverflow.com/questions/31196102/note-personperson-is-implicitly-deleted-because-the-default-definition-wo
+  MoveItCppTest();
+  // ################## 
   void SetUp() override
   {
     rclcpp::NodeOptions node_options;
@@ -69,7 +73,13 @@ public:
     // and provide descriptions about expected use
     // TODO(henningkayser): remove once all parameters are declared inside the components
     node_options.automatically_declare_parameters_from_overrides(true);
-    node_ = rclcpp::Node::make_shared("/moveit_cpp_test");
+    // #################################################################
+    // old
+    // node_ = rclcpp::Node::make_shared("/moveit_cpp_test");
+    // #################################################################
+    // new 425
+    auto node_ = rclcpp::Node::make_shared("/moveit_cpp_test");
+    // #################################################################
     moveit_cpp_ptr = std::make_unique<MoveItCpp>(node_);
     planning_component_ptr = std::make_unique<PlanningComponent>(PLANNING_GROUP, moveit_cpp_ptr);
     robot_model_ptr = moveit_cpp_ptr->getRobotModel();
@@ -99,15 +109,30 @@ protected:
   moveit::core::RobotModelConstPtr robot_model_ptr;
   const moveit::core::JointModelGroup* jmg_ptr;
   const std::string PLANNING_GROUP = "panda_arm";
-  geometry_msgs::PoseStamped target_pose1;
-  geometry_msgs::Pose target_pose2;
-  geometry_msgs::Pose start_pose;
+  // ############################################
+  // old
+  // geometry_msgs::PoseStamped target_pose1;
+  // geometry_msgs::Pose target_pose2;
+  // geometry_msgs::Pose start_pose;
+  // #############################################
+  // new 425
+  geometry_msgs::msg::PoseStamped target_pose1;
+  geometry_msgs::msg::Pose target_pose2;
+  geometry_msgs::msg::Pose start_pose;
+  // #############################################
 };
 
 // Test the current and the initial state of the Panda robot
 TEST_F(MoveItCppTest, GetCurrentStateTest)
 {
-  ros::Duration(1.0).sleep();  // Otherwise joint_states will result in an invalid robot state
+  // ########################################################
+  // old
+  // ros::Duration(1.0).sleep();  // Otherwise joint_states will result in an invalid robot state
+  // #########################################################
+  auto node = rclcpp::Node::make_shared("moveit_cpp_test");
+  rclcpp::WallRate rate(1.0); // https://docs.ros2.org/latest/api/rclcpp/classrclcpp_1_1GenericRate.html
+  rate.sleep();
+  // #########################################################
   auto robot_model = moveit_cpp_ptr->getRobotModel();
   auto robot_state = std::make_shared<moveit::core::RobotState>(robot_model);
   EXPECT_TRUE(moveit_cpp_ptr->getCurrentState(robot_state, 0.0));
@@ -176,10 +201,21 @@ TEST_F(MoveItCppTest, TestSetGoalFromRobotState)
 int main(int argc, char** argv)
 {
   testing::InitGoogleTest(&argc, argv);
-  ros::init(argc, argv, "moveit_cpp_test");
+  // #######################################
+  // old
+  // ros::init(argc, argv, "moveit_cpp_test");
 
-  ros::AsyncSpinner spinner(4);
-  spinner.start();
+  // ros::AsyncSpinner spinner(4);
+  // spinner.start();
+  // ########################################
+  // new 425
+  rclcpp::init(argc, argv);
+  auto node = rclcpp::Node::make_shared("moveit_cpp_test");
+
+  rclcpp::executors::MultiThreadedExecutor executor;
+  executor.add_node(node);
+  executor.spin();
+  // ########################################
 
   int result = RUN_ALL_TESTS();
 
